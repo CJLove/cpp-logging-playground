@@ -10,6 +10,7 @@ Requirements:
 - Type-safe
 - Customizable logging formats
 - Extensible for user-defined types
+- Async support
 
 ## spdlog/fmt
 Dependencies:
