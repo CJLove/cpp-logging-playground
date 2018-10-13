@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
 #include <thread>
 #include <chrono>
 #include <iostream>
@@ -78,22 +78,31 @@ class AppClass
 void usage()
 {
     std::cerr << "Usage:\n"
-              << "spdlog_console [-l <logLevel>]\n";
+              << "spdlog_console [-l <logLevel>][-f <logFile>][-s <size>]\n";
 }
 
 int main(int argc, char **argv)
 {
     int logLevel = spdlog::level::trace;
+    std::string logFile {"logfile.txt"};
     int c;
-    while ((c = getopt(argc, argv, "l:?")) != EOF)
+    int size = 1024;
+    while ((c = getopt(argc, argv, "l:f:s:?")) != EOF)
     {
         switch (c)
         {
         case 'l':
             logLevel = std::stoi(optarg);
             break;
+        case 'f':
+            logFile = optarg;
+            break;
+        case 's':
+            size = std::stoi(optarg);
+            break;
         case '?':
             usage();
+            exit(1);
             break;
         default:
             break;
@@ -101,14 +110,14 @@ int main(int argc, char **argv)
     }
 
     // Create the main logger named "logger" and configure it
-    auto logger = spdlog::stdout_logger_mt("logger");
+    auto logger = spdlog::rotating_logger_mt("logger",logFile,size,3);
     // Log format:
     // 2018-10-08 21:08:31.633|020288|I|Thread Worker thread 3 doing something
     logger->set_pattern("%Y-%m-%d %H:%M:%S.%e|%t|%L|%v");
     // Set the log level for filtering
     spdlog::set_level(static_cast<spdlog::level::level_enum>(logLevel));
 
-    logger->info("spdlog_console logging");
+    logger->info("Begin spdlog_file logging");
 
     std::vector<std::unique_ptr<AppClass>> threads;
     for (int i = 0; i < 10; i++)
@@ -119,5 +128,5 @@ int main(int argc, char **argv)
     logger->info("Main thread sleeping for 2 minutes");
     std::this_thread::sleep_for(std::chrono::minutes(2));
 
-    logger->info("Exiting");
+    logger->info("End spdlog_file logging");
 }

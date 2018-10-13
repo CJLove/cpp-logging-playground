@@ -5,7 +5,7 @@ project(spdlog_console)
 include_directories(/usr/local/include)
 
 set (spdlog_console_SRC
-    main.cpp
+    console.cpp
 )
 
 add_executable( spdlog_console ${spdlog_console_SRC})
