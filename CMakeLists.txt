@@ -19,7 +19,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCH
 endif()
 
 # Boost::log required Boost version >= 1.54.0 
-find_package(Boost 1.54.0 REQUIRED COMPONENTS log)
+find_package(Boost 1.54.0 REQUIRED COMPONENTS log thread)
 
 # fmt library dependency
 find_package(fmt CONFIG REQUIRED)
@@ -27,5 +27,10 @@ find_package(fmt CONFIG REQUIRED)
 # spdlog library dependency)
 find_package(spdlog CONFIG REQUIRED)
 
+# Threads
+find_package(Threads)
+
 add_subdirectory(spdlog_console)
 add_subdirectory(spdlog_file)
+add_subdirectory(boost_console)
+add_subdirectory(boost_file)
