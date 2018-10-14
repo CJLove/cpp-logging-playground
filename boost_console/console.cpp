@@ -1,6 +1,7 @@
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/expressions.hpp>
+#include <boost/log/support/date_time.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
@@ -12,6 +13,7 @@ namespace logging = boost::log;
 namespace src = boost::log::sources;
 namespace sinks = boost::log::sinks;
 namespace keywords = boost::log::keywords;
+namespace expr = boost::log::expressions;
 using namespace logging::trivial;
 
 #include <thread>
@@ -122,7 +124,18 @@ int main(int argc, char **argv)
     }
 
     logging::add_console_log(std::cout,
-        keywords::format = "%TimeStamp%|%Severity%|%Message%"
+        //keywords::format = "%TimeStamp%|%Severity%|%Message%"
+        keywords::format = 
+        (
+            expr::stream
+            << expr::format_date_time<boost::posix_time::ptime>("TimeStamp","%Y-%m-%d %H:%M%S.%f")
+            << "|"
+            << expr::attr<boost::log::attributes::current_thread_id::value_type >("ThreadID")
+            << "|"
+            << logging::trivial::severity
+            << "|"
+            << expr::smessage
+        )
     );
 
     logging::core::get()->set_filter(

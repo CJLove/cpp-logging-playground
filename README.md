@@ -18,4 +18,5 @@ Dependencies:
 * https://github.com/fmtlib/fmt
 
 ## boost::log
-Dependencies: boost
+Dependencies: 
+* boost - drags in multiple boost libraries (log, log_setup, thread, system, atomic, chrono, date_time, filesystem, regex)
