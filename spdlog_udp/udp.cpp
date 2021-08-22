@@ -1,6 +1,7 @@
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/rotating_file_sink.h>
+#include "udp_sink.h"
 #include <thread>
+#include <condition_variable>
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -29,7 +30,8 @@ class TraceMethod
 class AppClass
 {
   public:
-    AppClass(const std::string &name) : m_thread([this]() { this->thread(); }), m_name(name),
+    AppClass(const std::string &name) : m_thread([this]() { this->thread(); }), 
+m_name(name),
                                         m_logger(spdlog::get("logger"))
     {
     }
@@ -79,27 +81,27 @@ class AppClass
 void usage()
 {
     std::cerr << "Usage:\n"
-              << "spdlog_console [-l <logLevel>][-f <logFile>][-s <size>]\n";
+              << "spdlog_console [-l <logLevel>][-i <ipAddr>][-p <port>]\n";
 }
 
 int main(int argc, char **argv)
 {
     int logLevel = spdlog::level::trace;
-    std::string logFile {"logfile.txt"};
+    std::string ipAddr {"127.0.0.1"};
+    int port = 9000;
     int c;
-    int size = 1024;
-    while ((c = getopt(argc, argv, "l:f:s:?")) != EOF)
+    while ((c = getopt(argc, argv, "l:i:p:?")) != EOF)
     {
         switch (c)
         {
         case 'l':
             logLevel = std::stoi(optarg);
             break;
-        case 'f':
-            logFile = optarg;
+        case 'i':
+            ipAddr = optarg;
             break;
         case 's':
-            size = std::stoi(optarg);
+            port = std::stoi(optarg);
             break;
         case '?':
             usage();
@@ -111,14 +113,15 @@ int main(int argc, char **argv)
     }
 
     // Create the main logger named "logger" and configure it
-    auto logger = spdlog::rotating_logger_mt("logger",logFile,size,3);
+    spdlog::sinks::udp_sink_config cfg(ipAddr,port);
+    auto logger = spdlog::udp_logger_mt("logger",cfg);
     // Log format:
     // 2018-10-08 21:08:31.633|020288|I|Thread Worker thread 3 doing something
     logger->set_pattern("%Y-%m-%d %H:%M:%S.%e|%t|%L|%v");
     // Set the log level for filtering
     spdlog::set_level(static_cast<spdlog::level::level_enum>(logLevel));
 
-    logger->info("Begin spdlog_file logging");
+    logger->info("Begin spdlog_udp logging");
 
     std::vector<std::unique_ptr<AppClass>> threads;
     for (int i = 0; i < 10; i++)

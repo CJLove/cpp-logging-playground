@@ -32,5 +32,6 @@ find_package(Threads)
 
 add_subdirectory(spdlog_console)
 add_subdirectory(spdlog_file)
+add_subdirectory(spdlog_udp)
 add_subdirectory(boost_console)
 add_subdirectory(boost_file)
