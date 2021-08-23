@@ -27,7 +27,7 @@ class udp_client
     struct sockaddr_in sockAddr_;
 public:
 
-    bool init(const std::string &host, int port)
+    bool init(const std::string &host, uint16_t port)
     {
         socket_ = socket(PF_INET, SOCK_DGRAM, 0);
         if (socket_ < 0)
@@ -40,7 +40,7 @@ public:
         sockAddr_.sin_port = htons(port);
         inet_aton(host.c_str(), &sockAddr_.sin_addr);
 
-        memset(sockAddr_.sin_zero, 0x00, 8);
+        memset(sockAddr_.sin_zero, 0x00, sizeof(sockAddr_.sin_zero));
         return true;
     }
 
@@ -72,8 +72,8 @@ public:
     // On error close the connection and throw.
     void send(const char *data, size_t n_bytes)
     {
-        size_t toslen = 0;
-        size_t tolen = sizeof(struct sockaddr);
+        ssize_t toslen = 0;
+        socklen_t tolen = sizeof(struct sockaddr);
         if (( toslen = sendto(socket_, data, n_bytes, 0, (struct sockaddr *)&sockAddr_, tolen)) == -1)
         {
             throw_spdlog_ex("write(2) failed", errno);

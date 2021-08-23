@@ -32,9 +32,9 @@ namespace sinks {
 struct udp_sink_config
 {
     std::string server_host;
-    int server_port;
+    uint16_t server_port;
 
-    udp_sink_config(std::string host, int port)
+    udp_sink_config(std::string host, uint16_t port)
         : server_host{std::move(host)}
         , server_port{port}
     {}

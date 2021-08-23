@@ -2,6 +2,7 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <thread>
 #include <chrono>
+#include <condition_variable>
 #include <iostream>
 #include <memory>
 #include <unistd.h>

@@ -2,6 +2,7 @@
 #include <spdlog/sinks/stdout_sinks.h>
 #include <thread>
 #include <chrono>
+#include <condition_variable>
 #include <iostream>
 #include <unistd.h>
 

@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 {
     int logLevel = spdlog::level::trace;
     std::string ipAddr {"127.0.0.1"};
-    int port = 9000;
+    uint16_t port = 9000;
     int c;
     while ((c = getopt(argc, argv, "l:i:p:?")) != EOF)
     {
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
             ipAddr = optarg;
             break;
         case 's':
-            port = std::stoi(optarg);
+            port = static_cast<uint16_t>(std::stoi(optarg));
             break;
         case '?':
             usage();

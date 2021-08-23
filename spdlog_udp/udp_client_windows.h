@@ -8,6 +8,7 @@
 #include <spdlog/common.h>
 #include <spdlog/details/os.h>
 
+#ifdef _WIN32
 #include <winsock2.h>
 #include <windows.h>
 #include <ws2tcpip.h>
@@ -65,7 +66,7 @@ public:
         return socket_ != INVALID_SOCKET;
     }
 
-    bool init(const std::string &host, int port)
+    bool init(const std::string &host, uint16_t port)
     {
         // initialize winsock if needed
         if (!winsock_initialized_())
@@ -112,3 +113,5 @@ public:
 };
 } // namespace details
 } // namespace spdlog
+
+#endif
