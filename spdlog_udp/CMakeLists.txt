@@ -10,5 +10,5 @@ set (spdlog_udp_SRC
 
 add_executable( spdlog_udp ${spdlog_udp_SRC})
 
-target_link_libraries( spdlog_udp spdlog::spdlog pthread )
+target_link_libraries( spdlog_udp spdlog::spdlog Threads::Threads )
 
