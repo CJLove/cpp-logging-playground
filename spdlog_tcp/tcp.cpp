@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/udp_sink.h>
+#include <spdlog/sinks/tcp_sink.h>
 #include <thread>
 #include <condition_variable>
 #include <chrono>
@@ -83,7 +83,7 @@ m_name(name),
 void usage()
 {
     std::cerr << "Usage:\n"
-              << "spdlog_udp [-l <logLevel>][-i <ipAddr>][-p <port>]\n";
+              << "spdlog_tcp [-l <logLevel>][-i <ipAddr>][-p <port>]\n";
 }
 
 #ifdef WIN32
@@ -190,8 +190,10 @@ int main(int argc, char **argv)
     }
 
     // Create the main logger named "logger" and configure it
-    spdlog::sinks::udp_sink_config cfg(ipAddr,port);
-    auto logger = spdlog::udp_logger_mt("logger",cfg);
+    spdlog::sinks::tcp_sink_config cfg(ipAddr,port);
+    auto sink = std::make_shared<spdlog::sinks::tcp_sink_mt>(cfg);
+    auto logger = std::make_shared<spdlog::logger>("logger",sink);
+    spdlog::register_logger(logger);
     // Log format:
     // 2018-10-08 21:08:31.633|020288|I|Thread Worker thread 3 doing something
     logger->set_pattern("%Y-%m-%d %H:%M:%S.%e|%t|%L|%v");
