@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(spdlog_udp)
 
-include_directories(/usr/local/include)
+include_directories(/usr/local/include /usr/local/include/spdlog )
 
 set (spdlog_udp_SRC
     udp.cpp

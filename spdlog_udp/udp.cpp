@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include "udp_sink.h"
+#include <spdlog/sinks/udp_sink.h>
 #include <thread>
 #include <condition_variable>
 #include <chrono>
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
         case 'i':
             ipAddr = optarg;
             break;
-        case 's':
+        case 'p':
             port = static_cast<uint16_t>(std::stoi(optarg));
             break;
         case '?':
