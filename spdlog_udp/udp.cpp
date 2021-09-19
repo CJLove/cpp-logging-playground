@@ -194,7 +194,7 @@ int main(int argc, char **argv)
     auto logger = spdlog::udp_logger_mt("logger",cfg);
     // Log format:
     // 2018-10-08 21:08:31.633|020288|I|Thread Worker thread 3 doing something
-    logger->set_pattern("%Y-%m-%d %H:%M:%S.%e|%t|%L|%v");
+    logger->set_pattern("%Y-%m-%d %H:%M:%S.%e|%P|%t|%L|%v");
     // Set the log level for filtering
     spdlog::set_level(static_cast<spdlog::level::level_enum>(logLevel));
 
